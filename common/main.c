@@ -99,13 +99,19 @@ void main_loop(void)
         cli_secure_boot_cmd(s);
 #endif
 
-    /* 直接执行 TFTP 启动，不使用 autoboot_command */
+    /* ============================================ */
+    /* 自动网络启动 OpenWrt */
+    /* ============================================ */
+    printf("Initializing network...\n");
+    run_command("dhcp", 0);
+    mdelay(20000);
+
     printf("Auto booting OpenWrt via TFTP...\n");
     run_command("setenv serverip 192.168.1.10", 0);
     run_command("tftpboot 0x44000000 openwrt.itb", 0);
     run_command("bootm 0x44000000", 0);
+    /* ============================================ */
 
-    /* 如果上面的命令失败，才执行原有的 autoboot */
     autoboot_command(s);
 
     cli_loop();
