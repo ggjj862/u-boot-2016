@@ -95,7 +95,7 @@ void main_loop(void)
     s = bootdelay_process();
 
     /* 强制使用网络启动命令，忽略原有的 bootcmd */
-    s = "setenv serverip 192.168.1.10; setenv bootfile openwrt.itb; tftpboot; bootm 0x44000000";
+    s = "setenv serverip 192.168.1.10; tftpboot 0x44000000 openwrt.itb; bootm 0x44000000";
 
 #ifndef CONFIG_REDUCE_FOOTPRINT
     if (cli_process_fdt(&s))
