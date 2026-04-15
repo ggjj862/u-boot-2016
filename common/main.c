@@ -94,14 +94,18 @@ void main_loop(void)
 #endif
     s = bootdelay_process();
 
-    /* 强制使用网络启动命令，忽略原有的 bootcmd */
-    s = "setenv serverip 192.168.1.10; tftpboot 0x44000000 openwrt.itb; bootm 0x44000000";
-
 #ifndef CONFIG_REDUCE_FOOTPRINT
     if (cli_process_fdt(&s))
         cli_secure_boot_cmd(s);
 #endif
 
+    /* 直接执行 TFTP 启动，不使用 autoboot_command */
+    printf("Auto booting OpenWrt via TFTP...\n");
+    run_command("setenv serverip 192.168.1.10", 0);
+    run_command("tftpboot 0x44000000 openwrt.itb", 0);
+    run_command("bootm 0x44000000", 0);
+
+    /* 如果上面的命令失败，才执行原有的 autoboot */
     autoboot_command(s);
 
     cli_loop();
