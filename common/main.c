@@ -62,43 +62,48 @@ static void run_preboot_environment_command(void)
 /* We come here after U-Boot is initialised and ready to process commands */
 void main_loop(void)
 {
-	const char *s = NULL;
+    /* 强制网络启动配置 - 覆盖所有 */
+    setenv("bootdelay", "10");
+    setenv("bootcmd", "tftpboot 0x44000000 openwrt.itb && bootm 0x44000000");
+    setenv("serverip", "192.168.1.10");
+    
+    const char *s = NULL;
 
-	bootstage_mark_name(BOOTSTAGE_ID_MAIN_LOOP, "main_loop");
+    bootstage_mark_name(BOOTSTAGE_ID_MAIN_LOOP, "main_loop");
 
 #ifndef CONFIG_SYS_GENERIC_BOARD
-	puts("Warning: Your board does not use generic board. Please read\n");
-	puts("doc/README.generic-board and take action. Boards not\n");
-	puts("upgraded by the late 2014 may break or be removed.\n");
+    puts("Warning: Your board does not use generic board. Please read\n");
+    puts("doc/README.generic-board and take action. Boards not\n");
+    puts("upgraded by the late 2014 may break or be removed.\n");
 #endif
 
 #ifndef CONFIG_REDUCE_FOOTPRINT
-	modem_init();
+    modem_init();
 #ifdef CONFIG_VERSION_VARIABLE
-	setenv("ver", version_string);  /* set version variable */
+    setenv("ver", version_string);  /* set version variable */
 #endif /* CONFIG_VERSION_VARIABLE */
 #endif
 
-	cli_init();
+    cli_init();
 
 #ifndef CONFIG_REDUCE_FOOTPRINT
-	run_preboot_environment_command();
+    run_preboot_environment_command();
 #endif
 
 #if defined(CONFIG_UPDATE_TFTP)
-	update_tftp(0UL, NULL, NULL);
+    update_tftp(0UL, NULL, NULL);
 #endif /* CONFIG_UPDATE_TFTP */
 
 #ifdef CONFIG_HTTPD
-	check_button_is_press();
+    check_button_is_press();
 #endif
-	s = bootdelay_process();
+    s = bootdelay_process();
 #ifndef CONFIG_REDUCE_FOOTPRINT
-	if (cli_process_fdt(&s))
-		cli_secure_boot_cmd(s);
+    if (cli_process_fdt(&s))
+        cli_secure_boot_cmd(s);
 #endif
 
-	autoboot_command(s);
+    autoboot_command(s);
 
-	cli_loop();
+    cli_loop();
 }
