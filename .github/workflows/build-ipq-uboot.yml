@@ -33,7 +33,7 @@ jobs:
 
     strategy:
       matrix:
-        ipq_type: ['ipq40xx', 'ipq5018', 'ipq5332', 'ipq6018', 'ipq806x', 'ipq807x', 'ipq9574']
+        ipq_type: ['ipq6018']
       fail-fast: false
 
     if: github.event_name != 'workflow_dispatch' || inputs.ipq_type == 'all'
@@ -72,10 +72,8 @@ jobs:
             find ../staging_dir -name "*gcc*" | head -10
           fi
 
-      - name: Build ${{ matrix.ipq_type }} U-Boot
-        if: |
-          ${{ env.SHOULD_RUN_STEP }}
-        run: ./build.sh ${{ matrix.ipq_type }}
+      - name: Build U-Boot
+        run: ./build.sh ipq6018_xiaomi_ax1800
 
       - name: Upload compiled artifacts (bin directory)
         if: |
