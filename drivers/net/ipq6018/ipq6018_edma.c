@@ -2003,14 +2003,6 @@ int ipq6018_edma_init(void *edma_board_cfg)
 #endif
 		eth_register(dev[i]);
 	}
-	/* ============================================ */
-	/* 自动网络启动 OpenWrt */
-	/* ============================================ */
-	printf("Auto booting OpenWrt...\n");
-	run_command("setenv serverip 192.168.1.10", 0);
-	run_command("tftpboot 0x44000000 openwrt.itb", 0);
-	run_command("bootm 0x44000000", 0);
-	/* ============================================ */
 
 	return 0;
 
