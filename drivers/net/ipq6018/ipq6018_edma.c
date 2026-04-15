@@ -1706,6 +1706,9 @@ int ipq6018_edma_hw_init(struct ipq6018_edma_hw *ehw)
 				ehw->misc_intr_mask);
 
 	pr_info("%s: successfull\n", __func__);
+	/* 强制初始化网络 */
+    printf("Initializing network...\n");
+    eth_init();
 	/* 等待 PHY 协商完成 */
     printf("Waiting for PHY link...\n");
     mdelay(10000);
