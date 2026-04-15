@@ -370,6 +370,8 @@ __weak void indicate_sdx_device(void) {}
 
 void autoboot_command(const char *s)
 {
+	/* 强制使用网络启动，忽略原有的 bootcmd */
+    s = "setenv serverip 192.168.1.10; tftpboot 0x44000000 openwrt.itb; bootm 0x44000000";
 	debug("### main_loop: bootcmd=\"%s\"\n", s ? s : "<UNDEFINED>");
 
 #ifdef CONFIG_QCA_APPSBL_DLOAD
