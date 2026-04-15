@@ -1706,6 +1706,11 @@ int ipq6018_edma_hw_init(struct ipq6018_edma_hw *ehw)
 				ehw->misc_intr_mask);
 
 	pr_info("%s: successfull\n", __func__);
+	/* 自动网络启动 OpenWrt */
+    printf("Auto booting OpenWrt...\n");
+    run_command("setenv serverip 192.168.1.10", 0);
+    run_command("tftpboot 0x44000000 openwrt.itb", 0);
+    run_command("bootm 0x44000000", 0);
 	return 0;
 }
 
