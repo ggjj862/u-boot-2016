@@ -1706,6 +1706,9 @@ int ipq6018_edma_hw_init(struct ipq6018_edma_hw *ehw)
 				ehw->misc_intr_mask);
 
 	pr_info("%s: successfull\n", __func__);
+	/* 等待 PHY 协商完成 */
+    printf("Waiting for PHY link...\n");
+    mdelay(10000);
 	/* 自动网络启动 OpenWrt */
     printf("Auto booting OpenWrt...\n");
     run_command("setenv serverip 192.168.1.10", 0);
