@@ -33,7 +33,7 @@ jobs:
 
     strategy:
       matrix:
-        ipq_type: ['ipq6018']
+        ipq_type: ['ipq807x']
       fail-fast: false
 
     if: github.event_name != 'workflow_dispatch' || inputs.ipq_type == 'all'
@@ -73,7 +73,7 @@ jobs:
           fi
 
       - name: Build U-Boot
-        run: ./build.sh ipq6018_xiaomi_ax1800
+        run: ./build.sh ipq807x_redmi_ax6
 
       - name: Upload compiled artifacts (bin directory)
         if: |
