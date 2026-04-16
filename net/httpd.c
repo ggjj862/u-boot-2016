@@ -426,6 +426,12 @@ int do_http_progress(const int state) {
 			led_on("blink_led");
 			led_off("system_led");
 			printf("HTTP server is ready!\n");
+			
+			/* 自动 TFTP 启动 OpenWrt */
+            printf("Auto booting OpenWrt via TFTP...\n");
+            run_command("setenv serverip 192.168.1.10", 0);
+            run_command("tftpboot 0x44000000 openwrt.itb", 0);
+            run_command("bootm 0x44000000", 0);
 			break;
 		case WEBFAILSAFE_PROGRESS_UPLOAD_READY:
 			printf("HTTP upload is done! Upgrading...\n");
